@@ -162,59 +162,82 @@ int main() {
 
     sleep_ms(3000);
 
+    uint8_t in[2] = {0,0};   
+    uint8_t out[2] = {0x72,0};
 
+    i2c_write_blocking(i2c_default, 0x21, &out[0], 1, false);
 
+    i2c_read_blocking(i2c_default, 0x21, &in[0], 1, false);
+    printf("register 0x72= %d\n", in[0]);
+    out[1] = in[0] | 0b10000000;
+    i2c_write_blocking(i2c_default, 0x21, out, 2, false);  // addr and val
+
+    i2c_read_blocking(i2c_default, 0x21, in, 1, false);
+    printf("register 0x72= %d\n", in[0]);
     
     int32_t vsyncs = 0;
     int32_t hrefs = 0;
     int32_t pclcks = 0;
+    int32_t nvsyncs = 0;
+    int32_t nhrefs = 0;
+    int32_t npclcks = 0;
 
     while(true)
     {
         vsyncs = 0;
         hrefs = 0;
         pclcks = 0;
+        nvsyncs = 0;
+        nhrefs = 0;
+        npclcks = 0;
 
-        while(vsyncs == 0)
-        {
-            while(!gpio_get(VS)) //wait for a vsync
-            {
-            }
-            vsyncs++;
-            while(gpio_get(VS)) //wait to go low again
-            {
-            }
+        // while(vsyncs == 0)
+        // {
+        //     while(!gpio_get(VS)) //wait for a vsync
+        //     {
+        //     }
+        //     vsyncs++;
+        //     while(gpio_get(VS)) //wait to go low again
+        //     {
+        //     }
 
-            while(!gpio_get(VS)) //while in the vsync low phase
-            {   
+        //     while(!gpio_get(VS)) //while in the vsync low phase
+        //     {   
 
-                // while(!gpio_get(HS))  //wait for hsync to go high for row
-                // {
-                // }
-                // hrefs++;
-                while(gpio_get(HS))  //while in hsync
-                {
-                    while(!gpio_get(PLK))
-                    {
-                    }
-                    pclcks++;
-                    while(gpio_get(PLK)) //wait to go low again
-                    {
-                    }
-                }
+        //         // while(!gpio_get(HS))  //wait for hsync to go high for row
+        //         // {
+        //         // }
+        //         // hrefs++;
+        //         while(gpio_get(HS))  //while in hsync
+        //         {
+        //             while(!gpio_get(PLK))
+        //             {
+        //             }
+        //             pclcks++;
+        //             while(gpio_get(PLK)) //wait to go low again
+        //             {
+        //             }
+        //         }
 
                 
 
-            }
-
+        //     }
+        while(!gpio_get(VS))
+        {
+            if(gpio_get(HS)) hrefs++; else nhrefs++;
+            if(gpio_get(PLK)) pclcks++; else npclcks++;
+        }
 
 
             
-        }
+        
 
     printf("number of vsyncs: %d\n", vsyncs);
     printf("number of hsyncs: %d\n", hrefs);
     printf("number of pclcks: %d\n", pclcks);
+    printf("number of not vsyncs: %d\n", nvsyncs);
+    printf("number of not hsyncs: %d\n", nhrefs);
+    printf("number of not pclcks: %d\n", npclcks);
     //printf("hi\n");
 
     sleep_ms(2000);
