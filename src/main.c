@@ -22,12 +22,11 @@ int main()
 
 
 
-    //OV7670_read_register(0x71)
-    OV7670_print_all_registers();
-    printf("\n\n\nresetting registers\n\n");
-    sleep_ms(2000);
-    OV7670_reset_registers();
-    OV7670_print_all_registers();
+    // OV7670_print_all_registers();
+    // printf("\n\n\nresetting registers\n\n");
+    // sleep_ms(2000);
+    // OV7670_reset_registers();
+    // OV7670_print_all_registers();
 
     
 
