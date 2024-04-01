@@ -4,11 +4,11 @@ Wire colours:
 
 Wire GPIOs:
 
-SDA: GPIO_0
-SCL: GPIO_1
-VS: GPIO_6
-HS: GPIO_5
-PLK: GPIO_7
-XLK: GPIO_21
+- SDA: GPIO_0
+- SCL: GPIO_1
+- VS: GPIO_6
+- HS: GPIO_5
+- PLK: GPIO_7
+- XLK: GPIO_21
 
 TODO: Markup table instead...
