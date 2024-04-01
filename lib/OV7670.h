@@ -33,7 +33,7 @@ void OV7670_init();
 
 
 /**
- * Set bit[7] (LSB) of register 0x12 to 1 to reset all registers
+ * Set bit[7] (MSB) of register 0x12 to 1 to reset all registers
 */
 void OV7670_reset_registers();
 

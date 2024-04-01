@@ -1,2 +1,2 @@
 XLK needs to be configured for SCCB interface to work
-bit[7] in spec document refers to LSB (0b00000001) for register values
+bit[0] in spec document refers to LSB (0b00000001) for register values and bit[7] refers to the MSB

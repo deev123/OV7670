@@ -34,8 +34,8 @@ void OV7670_init()
     sleep_ms(1);
 
     #ifdef DEBUG
-        if(OV7670_responsive()) printf("OV7670 acked on SCCB bus\n");
-        else printf("OV7670 was unresponsive on SCCB bus. Check XLK input clock is correctly configured\n");
+        if(OV7670_responsive()) printf("OV7670 acked to address 0x%02X on SCCB bus\n", OV7670_I2C_ADDR);
+        else printf("OV7670 was unresponsive to address 0x%02X on SCCB bus. Check XLK input clock is correctly configured\n", OV7670_I2C_ADDR);
     #endif
 
 }
@@ -43,7 +43,7 @@ void OV7670_init()
 
 void OV7670_reset_registers()
 {
-    OV7670_write_register(0x12, OV7670_read_register(0x11) | (0b00000001));
+    OV7670_write_register(0x12, OV7670_read_register(0x12) | (0b10000000));  // set reset bit [7] (MSB) to reset all resgisters
 }
 
 
