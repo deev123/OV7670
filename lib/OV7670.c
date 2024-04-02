@@ -23,7 +23,7 @@ void OV7670_init()
     gpio_init(PLK);              gpio_init(VS);              gpio_init(HS);              //gpio_init(XLK);   //XLK is an input and is set with clock
     gpio_set_dir(PLK, GPIO_IN);  gpio_set_dir(VS, GPIO_IN);  gpio_set_dir(HS, GPIO_IN);  //gpio_set_dir(XLK, GPIO_OUT);
 
-    clock_gpio_init(21, CLOCKS_CLK_GPOUT0_CTRL_AUXSRC_VALUE_CLK_SYS, 4); // XLK clock set to sys / 4 (125MHz / 4 = 31)  (/5 would be 25MHz (just over the minimum speed))
+    clock_gpio_init(21, CLOCKS_CLK_GPOUT0_CTRL_AUXSRC_VALUE_CLK_SYS, 5); // XLK clock set to sys / 4 (125MHz / 4 = 31)  (/5 would be 25MHz (just over the minimum speed))
 
     i2c_init(i2c_default, 100 * 1000);
     gpio_set_function(SDA, GPIO_FUNC_I2C);
@@ -49,8 +49,7 @@ void OV7670_reset_registers()
 
 void OV7670_set_registers()
 {
-    OV7670_write_register(0x11, (OV7670_read_register(0x11) & 0b11111101) | 0b11111100);  // scale clock /63 (slowest possible)   // TODO: Make it easier to set bits to 1s and 0s in same operation (maybe string like 01###100 to say which bits are on or off)
-    
+    OV7670_write_register(0x11, (OV7670_read_register(0x11) & 0b10000000) | 0b00011111);  // scale clock /63 (slowest possible)   // TODO: Make it easier to set bits to 1s and 0s in same operation (maybe string like 01###100 to say which bits are on or off)
     // Add all configuration here...
 }
 

@@ -83,25 +83,25 @@ int main()
                 
 
         //     }
-        while(!gpio_get(VS))
-        {
-            if(gpio_get(HS)) hrefs++; else nhrefs++;
-            if(gpio_get(PLK)) pclcks++; else npclcks++;
-        }
+        // while(!gpio_get(VS))
+        // {
+        //     if(gpio_get(HS)) hrefs++; else nhrefs++;
+        //     if(gpio_get(PLK)) pclcks++; else npclcks++;
+        // }
 
 
             
         
 
-        printf("number of vsyncs: %d\n", vsyncs);
-        printf("number of hsyncs: %d\n", hrefs);
-        printf("number of pclcks: %d\n", pclcks);
-        printf("number of not vsyncs: %d\n", nvsyncs);
-        printf("number of not hsyncs: %d\n", nhrefs);
-        printf("number of not pclcks: %d\n", npclcks);
-        //printf("hi\n");
+        // printf("number of vsyncs: %d\n", vsyncs);
+        // printf("number of hsyncs: %d\n", hrefs);
+        // printf("number of pclcks: %d\n", pclcks);
+        // printf("number of not vsyncs: %d\n", nvsyncs);
+        // printf("number of not hsyncs: %d\n", nhrefs);
+        // printf("number of not pclcks: %d\n", npclcks);
+        // //printf("hi\n");
 
-        sleep_ms(2000);
+        // sleep_ms(2000);
 
     }
     
