@@ -95,3 +95,5 @@ void OV7670_capture_frame(uint16_t width, uint16_t height);
 void OV7670_print_frame();
 
 uint8_t OV7670_read_data_bus();
+
+void OV7670_output_8_bar_color_test_pattern();

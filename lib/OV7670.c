@@ -66,19 +66,24 @@ void OV7670_set_registers()
     // Add all configuration here...
     
     OV7670_write_register(0x12, (OV7670_read_register(0x12) & 0b11111010) | 0b00000100);  // rgb but not bayer
-    OV7670_write_register(0x12, (OV7670_read_register(0x12) & 0b11111101) | 0b00000010);  // colour bar
+    
 
     OV7670_write_register(0x40, (OV7670_read_register(0x40) & 0b11001111) | 0b00010000);  // rgb 565
 
-    OV7670_write_register(0x70, (OV7670_read_register(0x70) & 0b11001111) | 0b00010000); // test pattern
+    //OV7670_output_8_bar_color_test_pattern();
 
-    OV7670_write_register(0x42, (OV7670_read_register(0x42) & 0b11110111) | 0b00001000); // enable color bar
-
-    // OV7670_write_register(0x70, (OV7670_read_register(0x70) & 0b01111111) | 0b00000000); // test_pattern[0] colour bar
-    // OV7670_write_register(0x71, (OV7670_read_register(0x71) & 0b01111111) | 0b10000000); // test_pattern[1] colour bar
 
     // OV7670_write_register(0x00, 0xFF); // gain
     // OV7670_write_register(0x02, 0xFF); // red channel gain max
+}
+
+void OV7670_output_8_bar_color_test_pattern()
+{
+    OV7670_write_register(0x12, (OV7670_read_register(0x12) & 0b11111101) | 0b00000010); // colour bar
+    OV7670_write_register(0x70, (OV7670_read_register(0x70) & 0b11001111) | 0b00010000); // test pattern
+    OV7670_write_register(0x42, (OV7670_read_register(0x42) & 0b11110111) | 0b00001000); // enable color bar
+    OV7670_write_register(0x70, (OV7670_read_register(0x70) & 0b01111111) | 0b00000000); // test_pattern[0] colour bar
+    OV7670_write_register(0x71, (OV7670_read_register(0x71) & 0b01111111) | 0b10000000); // test_pattern[1] colour bar
 }
 
 
