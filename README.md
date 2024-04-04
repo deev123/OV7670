@@ -1,14 +1,27 @@
-# Wire colours:
+# OV7670 Library for the RP2040 Raspberry Pi Pico
+TODO: Description here
 
-![image](https://github.com/deev123/OV7670/assets/91595217/8ca0666e-e398-4b7b-b0a7-364688d86dba)
+# Pin Configuration:
 
-# Wire GPIOs:
+| OV7670 Pin | PICO Pin |
+| - | - |
+| 3.3V | 3V3(OUT) |
+| RET | 3V3(OUT) |
+| DGND | GND |
+| PWDN | GND |
+| SDA | GP1 |
+| SCL | GP2 |
+| XLK | GP21 |
+| VS | GP6 |
+| HS | GP5 |
+| PLK | GP7 |
+| D0 | GP8 |
+| D1 | GP9 |
+| D2 | GP10 |
+| D3 | GP11 |
+| D4 | GP12 |
+| D5 | GP13 |
+| D6 | GP14 |
+| D7 | GP15 |
 
-- SDA: GPIO_0
-- SCL: GPIO_1
-- VS: GPIO_6
-- HS: GPIO_5
-- PLK: GPIO_7
-- XLK: GPIO_21
-
-TODO: Markup table instead...
+TODO: Wiring Diagram
