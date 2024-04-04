@@ -64,12 +64,12 @@ void count_plks_in_hrefs_in_vsync()
 int main()
 {
     stdio_init_all();
-    sleep_ms(5000);
+    //sleep_ms(5000);
     OV7670_init();
     OV7670_set_registers();
-    sleep_ms(1000);
-    OV7670_print_all_registers();
-    sleep_ms(1000);
+    //sleep_ms(1000);
+    //OV7670_print_all_registers();
+    //sleep_ms(1000);
 
 
 
@@ -92,14 +92,26 @@ int main()
     int32_t nhrefs = 0;
     int32_t npclcks = 0;
 
-    while(true)
-    {
-        count_plks_in_hrefs_in_vsync();
-        sleep_ms(1000);
+    // while(true)
+    // {
+    //     count_plks_in_hrefs_in_vsync();
+    //     sleep_ms(1000);
 
-    }
+    // }
+    sleep_ms(5000);
+    OV7670_capture_frame(0,0);
+    OV7670_print_frame();
+
+    // while(true)
+    // {
+    //     // OV7670_capture_frame(0,0);
+    //     // OV7670_print_frame();
+    //     //_read_half_pixel();
+    //     sleep_ms(1000);
+    //     //printf("\npixel: %d%d", OV7670_frame_buf[0], OV7670_frame_buf[1]);
+    // }
     
-    printf("Done.\n");
+    //printf("Done.\n");
     return 0;
 
 }

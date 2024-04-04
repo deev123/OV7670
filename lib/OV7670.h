@@ -6,15 +6,23 @@
 #define VS 6    // correct
 #define HS 5    // correct
 #define PLK 7   // correct
-//#define XLK 21
-//#define XLK_FREQUENCY 24000000  // XLK is 24MHz
+#define XLK 21
 #define SDA 0
 #define SCL 1
-// D0-D7 will be GPIO 15,14,13,12,11,10,9,8s ....
+
+#define D0 8
+#define D1 9
+#define D2 10
+#define D3 11
+#define D4 12
+#define D5 13
+#define D6 14
+#define D7 15
 
 #define OV7670_I2C_ADDR 0x21
+//#define DEBUG  //debug flag
 
-#define DEBUG  //debug flag
+extern uint8_t OV7670_frame_buf[64000];
 
 /**
  * Call this before any other function from OV7670 library
@@ -76,3 +84,14 @@ void OV7670_print_register(uint8_t reg_addr);
  * print the value of every register from 0 to 0xC9
 */
 void OV7670_print_all_registers();
+
+
+/**
+ * put the output from the sensors into the OV7670_frame_buf array
+*/
+void OV7670_capture_frame(uint16_t width, uint16_t height);
+
+
+void OV7670_print_frame();
+
+uint8_t OV7670_read_data_bus();
