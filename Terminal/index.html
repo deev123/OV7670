@@ -22,19 +22,16 @@
         clear:both;
         margin:5px;
     }
-    #hex_input
+    .input_group
     {
         vertical-align: top;
         float:left;
         clear:both;
         margin:10px;
     }
-    #serial_command_input
+    .render_button
     {
         vertical-align: top;
-        float:left;
-        clear:both;
-        margin:10px;
     }
     #buttons
     {
@@ -56,29 +53,28 @@
 
     <h1>OV7670 camera terminal</h1>
 
-    <div id="hex_input">
+    <div class="input_group">
     <label for="hex_input_box">RGB565 hex input:</label>
     <textarea id="hex_input_box" rows="10" cols="50"></textarea>
+    <button id="render_button" class="render_button" onclick="image.render()">Render</button>
     </div>
 
-    <div id="big_or_little_endian_input">
-    <label for="big_endian">Big Endian</label>
-    <input type="radio" id="big_endian" name="big_or_little_endian" value="big endian" checked onchange="image.big_endian=true; image.render();">
-    <label for="little_endian">Little Endian</label>
-    <input type="radio" id="little_endian" name="big_or_little_endian" value="little endian" onchange="image.big_endian=false; image.render();">
+    <div class="input_group">
+        <label for="byte_offset">Byte Offset</label>
+        <input type="number" id="byte_offset" name="byte_offset" onchange="image.data_buf_offset=parseInt(this.value,10); image.render();">
+        
+        <label for="big_endian">Big Endian</label>
+        <input type="radio" id="big_endian" name="big_or_little_endian" value="big endian" checked onchange="image.big_endian=true; image.render();">
+        <label for="little_endian">Little Endian</label>
+        <input type="radio" id="little_endian" name="big_or_little_endian" value="little endian" onchange="image.big_endian=false; image.render();">
     </div>
 
-    <div>
-    <label for="byte_offset">Byte Offset</label>
-    <input type="number" id="byte_offset" name="byte_offset" onchange="image.data_buf_offset=parseInt(this.value,10); image.render();">
-    </div>
-
-    <div id="serial_command_input">
+    <div class="input_group">
     <label for="serial_input">Serial in:</label>
     <input type="text" id="serial_input">
     </div>
 
-    <div id="buttons">
+    <div class="input_group">
     <button class="command_button" onclick="open_port()">Open Port</button>
     <button class="command_button" onclick="take_picture()">Take picture</button>
     </div>
