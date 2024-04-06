@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<title>Experiments</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+
+<style>
+    .canvas
+    {
+        border: solid 1px black;
+        width:1000px;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        clear:both;
+        float:left;
+    }
+    .command_button
+    {
+        float:left;
+        clear:both;
+        margin:5px;
+    }
+    #hex_input
+    {
+        vertical-align: top;
+        float:left;
+        clear:both;
+        margin:10px;
+    }
+    #serial_command_input
+    {
+        vertical-align: top;
+        float:left;
+        clear:both;
+        margin:10px;
+    }
+    #buttons
+    {
+        float:left;
+        clear:both;
+        margin:10px;
+    }
+    label
+    {
+        vertical-align: top;;
+    }
+</style>
+
+</head>
+
+<body>
+
+    
+
+    <h1>OV7670 camera terminal</h1>
+
+    <div id="hex_input">
+    <label for="hex_input_box">RGB565 hex input:</label>
+    <textarea id="hex_input_box" rows="10" cols="50"></textarea>
+    </div>
+
+    <div id="big_or_little_endian_input">
+    <label for="big_endian">Big Endian</label>
+    <input type="radio" id="big_endian" name="big_or_little_endian" value="big endian" checked onchange="image.big_endian=true; image.render();">
+    <label for="little_endian">Little Endian</label>
+    <input type="radio" id="little_endian" name="big_or_little_endian" value="little endian" onchange="image.big_endian=false; image.render();">
+    </div>
+
+    <div>
+    <label for="byte_offset">Byte Offset</label>
+    <input type="number" id="byte_offset" name="byte_offset" onchange="image.data_buf_offset=parseInt(this.value,10); image.render();">
+    </div>
+
+    <div id="serial_command_input">
+    <label for="serial_input">Serial in:</label>
+    <input type="text" id="serial_input">
+    </div>
+
+    <div id="buttons">
+    <button class="command_button" onclick="open_port()">Open Port</button>
+    <button class="command_button" onclick="take_picture()">Take picture</button>
+    </div>
+    <canvas class="canvas" id="canvas" width="640px" height="1000px"></canvas>
+
+</body>
+
+<script src="scripts.js"></script>
+
+</html>
