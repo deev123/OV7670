@@ -1,9 +1,28 @@
 
 
 
+let hex_input = document.getElementById("hex_input_box");
 
-draw_hex_data = async function()
+
+let render_hex_data = function()
 {
+    //console.log(hex_input.value);
+    image.set_buf_pos(0);
+    image.append_data_buf(hex_string_to_uint8_array(hex_input.value));
+    image.render();
+}
+
+let hex_string_to_uint8_array = function(hex_string)
+{
+    uint8_array = new Uint8Array(hex_string.length/2);
+    for(let i = 0; i < hex_string.length; i+=2)
+    {
+        let hex = hex_string.substr(i, 2);
+        let val = parseInt(hex, 16);
+        uint8_array[i/2] = val;
+    }
+    return uint8_array;
+    // return new TextEncoder().encode(hex_string);
 
 }
 
