@@ -61,6 +61,8 @@ class Picture
     {
         this.canvas.width=x;
         this.canvas.height=y;
+        this.data_buf = new Uint8Array(this.canvas.width*this.canvas.height*2);  //TODO: This loses the data from the buffers
+        this.image_data = new Uint8Array(this.canvas.width*this.canvas.height*4);
         this.image_data_to_canvas();
     }
 
@@ -106,16 +108,16 @@ class Picture
 
                     if(this.big_endian)
                     {
-                        this.image_data[(i*4)] = ((this.data_buf[(i*2)+this.data_buf_offset] & 0b11111000) >>> 3)*8; // scale 5 bit to 8 bit
-                        this.image_data[(i*4)+1] = (((this.data_buf[(i*2)+this.data_buf_offset] & 0b00000111) << 3) + ((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b11100000) >>> 5)) *4; //6 bit to 8 bit
-                        this.image_data[(i*4)+2] = (this.data_buf[(i*2)+1+this.data_buf_offset] & 0b00011111)*8;
+                        this.image_data[(i*4)] = ((this.data_buf[(i*2)+this.data_buf_offset] & 0b11111000) >>> 3)*8.225806451612903; // scale 5 bit to 8 bit
+                        this.image_data[(i*4)+1] = (((this.data_buf[(i*2)+this.data_buf_offset] & 0b00000111) << 3) + ((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b11100000) >>> 5)) *4.047619047619048; //6 bit to 8 bit
+                        this.image_data[(i*4)+2] = (this.data_buf[(i*2)+1+this.data_buf_offset] & 0b00011111)*8.225806451612903;
                         this.image_data[(i*4)+3] = 255;
                     }
                     else //little endian
                     {
-                        this.image_data[(i*4)] = ((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b11111000) >>> 3)*8; // scale 5 bit to 8 bit
-                        this.image_data[(i*4)+1] = (((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b00000111) << 3) + ((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b11100000) >>> 5)) *4; //6 bit to 8 bit
-                        this.image_data[(i*4)+2] = (this.data_buf[(i*2)+this.data_buf_offset] & 0b00011111)*8;
+                        this.image_data[(i*4)] = ((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b11111000) >>> 3)*8.225806451612903; // scale 5 bit to 8 bit
+                        this.image_data[(i*4)+1] = (((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b00000111) << 3) + ((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b11100000) >>> 5)) *4.047619047619048; //6 bit to 8 bit
+                        this.image_data[(i*4)+2] = (this.data_buf[(i*2)+this.data_buf_offset] & 0b00011111)*8.225806451612903;
                         this.image_data[(i*4)+3] = 255;
                     }
                 }
