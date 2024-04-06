@@ -22,7 +22,8 @@
 #define OV7670_I2C_ADDR 0x21
 //#define DEBUG  //debug flag
 
-extern uint8_t OV7670_frame_buf[64000];
+extern uint8_t OV7670_frame_buf[70800];
+extern uint32_t OV7670_frame_buf_current_pixel;
 
 /**
  * Call this before any other function from OV7670 library
@@ -92,8 +93,10 @@ void OV7670_print_all_registers();
 void OV7670_capture_frame(uint16_t width, uint16_t height);
 
 
-void OV7670_print_frame();
+void OV7670_print_frame_buf();
 
 uint8_t OV7670_read_data_bus();
 
 void OV7670_output_8_bar_color_test_pattern();
+
+void OV7670_get_next_frame_buf();

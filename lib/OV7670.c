@@ -17,8 +17,23 @@
 uint8_t OV7670_SCCB_rx_buf[10];
 uint8_t OV7670_SCCB_tx_buf[10];
 
-//uint8_t OV7670_frame_buf[153600];    // to fit the frame in ram we will skip every 2nd pixel and row leaving us with a 320x240 image out of the full 640x480. Each pixel is two bytes which means our frame buffer will be 320*240*2 bytes long   // TODO: Potential gaps to stream video through uart or something?
-uint8_t OV7670_frame_buf[64000]; //first 100 rows
+//uint32_t total_pixels = 307200; // each pixel is two bytes
+uint8_t OV7670_frame_buf[70800];      // 640x480 image is too large to store so we can only store part at a time
+//uint8_t OV7670_frame_buf[64000]; //first 100 rows
+uint32_t OV7670_current_pbyte;
+uint32_t OV7670_frame_buf_size;  // for if not the whole buffer is used by the data
+
+
+void OV7670_end_frame_buf()
+{
+    OV7670_current_pbyte += OV7670_frame_buf_size;
+}
+
+void OV7670_print_full_frame()
+{
+
+}
+
 
 
 void OV7670_init()
@@ -163,7 +178,7 @@ void OV7670_capture_frame(uint16_t width, uint16_t height)     // TODO: Make wor
         {
             while(!gpio_get(PLK));  // wait for pixel plk pulse
 
-            if(true/*row % 4 > 1 && column % 2 > 0*/) //read pixel every second pixel (2 half pixels) and every second row 
+            if(row % 4 > 1 && column % 2 > 0) //read pixel every second pixel (2 half pixels) and every second row 
             {
                 //capture frame here
                 if(index < sizeof(OV7670_frame_buf)) OV7670_frame_buf[index] = OV7670_read_data_bus();
@@ -188,12 +203,62 @@ void OV7670_capture_frame(uint16_t width, uint16_t height)     // TODO: Make wor
     
 }
 
-void OV7670_print_frame()
+void OV7670_get_next_frame_buf()
+{
+    OV7670_frame_buf_size = 0;
+    uint32_t pbyte = 0;
+
+    while(!gpio_get(VS)); //wait for vsync high        // this is not very good because there is no way out of a failure here
+    while(gpio_get(VS));  //wait for vsync low
+
+    while(true) //while in the vsync low phase
+    {   
+        while(!gpio_get(HS))  //wait for href to go high for row. Vsync may go high while href is low to designate the start of a new frame
+        {
+            if(gpio_get(VS)) //vsync may go high while href is low signifying the end of a frame in which case we end the frame capturing function
+            {
+                OV7670_current_pbyte = 0;
+                return;
+            }
+        }
+        while(gpio_get(HS))  //while in href
+        {
+            while(!gpio_get(PLK));  // wait for pixel plk pulse
+
+            //capture frame here
+            if(pbyte >= OV7670_current_pbyte) //framebuf can start
+            {
+                //pixel is within the new framebuf so ad onto framebuf if not full
+                if(OV7670_frame_buf_size < sizeof(OV7670_frame_buf))
+                {
+                    OV7670_frame_buf[OV7670_frame_buf_size] = OV7670_read_data_bus();
+                    OV7670_current_pbyte++;
+                    OV7670_frame_buf_size++;
+                }
+                else // else framebuf is full so return and keep current OV7670_current_pbyte
+                {
+                    return;
+                }
+                
+            }
+            pbyte++;
+
+            while(gpio_get(PLK)) //necessary to prevent reading the same pixel
+            {
+            }
+        }
+        
+
+    }
+
+}
+
+void OV7670_print_frame_buf()
 {
     #ifdef DEBUG
         printf("OV7670_print_frame(): Begin frame\n");
     #endif
-    for(uint32_t i = 0; i < sizeof(OV7670_frame_buf); i++)
+    for(uint32_t i = 0; i < OV7670_frame_buf_size; i++)
     {
         printf("%02X", OV7670_frame_buf[i]);
     }

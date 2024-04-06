@@ -99,8 +99,54 @@ int main()
 
     // }
     sleep_ms(5000);
-    OV7670_capture_frame(0,0);
-    OV7670_print_frame();
+    // OV7670_capture_frame(0,0);
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+    OV7670_get_next_frame_buf();
+    OV7670_print_frame_buf();
+   
 
     // while(true)
     // {
