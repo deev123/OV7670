@@ -26,6 +26,28 @@ let hex_string_to_uint8_array = function(hex_string)
 
 }
 
+let rgb565_to_rgba = function(big_endian, bytes)  //return 4 bytes rgba from 2 bytes rgb565
+{
+    let r,g,b,a;
+
+    if(big_endian)
+    {
+        r = ((bytes[0] & 0b11111000) >>> 3) * 8.225806451612903;
+        g = ( ((bytes[0] & 0b00000111) << 3) | ((bytes[1] & 0b11100000) >>> 5) ) * 4.047619047619048;
+        b = (bytes[1] & 0b00011111) * 8.225806451612903;
+        a = 255;
+    }
+    else
+    {
+        r = ((bytes[1] & 0b11111000) >>> 3) * 8.225806451612903;
+        g = ( ((bytes[1] & 0b00000111) << 3) | ((bytes[0] & 0b11100000) >>> 5) ) * 4.047619047619048;
+        b = (bytes[0] & 0b00011111) * 8.225806451612903;
+        a = 255;
+    }
+    
+    return [r,g,b,a];
+}
+
 
 class Picture
 {
@@ -106,20 +128,11 @@ class Picture
                         }
                     }
 
-                    if(this.big_endian)
-                    {
-                        this.image_data[(i*4)] = ((this.data_buf[(i*2)+this.data_buf_offset] & 0b11111000) >>> 3)*8.225806451612903; // scale 5 bit to 8 bit
-                        this.image_data[(i*4)+1] = (((this.data_buf[(i*2)+this.data_buf_offset] & 0b00000111) << 3) + ((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b11100000) >>> 5)) *4.047619047619048; //6 bit to 8 bit
-                        this.image_data[(i*4)+2] = (this.data_buf[(i*2)+1+this.data_buf_offset] & 0b00011111)*8.225806451612903;
-                        this.image_data[(i*4)+3] = 255;
-                    }
-                    else //little endian
-                    {
-                        this.image_data[(i*4)] = ((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b11111000) >>> 3)*8.225806451612903; // scale 5 bit to 8 bit
-                        this.image_data[(i*4)+1] = (((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b00000111) << 3) + ((this.data_buf[(i*2)+1+this.data_buf_offset] & 0b11100000) >>> 5)) *4.047619047619048; //6 bit to 8 bit
-                        this.image_data[(i*4)+2] = (this.data_buf[(i*2)+this.data_buf_offset] & 0b00011111)*8.225806451612903;
-                        this.image_data[(i*4)+3] = 255;
-                    }
+                    let rgba_val = rgb565_to_rgba(this.big_endian, [this.data_buf[(i * 2)+this.data_buf_offset], this.data_buf[(i * 2) + 1 + this.data_buf_offset]]);
+                    this.image_data[(i*4)] = rgba_val[0]
+                    this.image_data[(i*4)+1] = rgba_val[1]
+                    this.image_data[(i*4)+2] = rgba_val[2]
+                    this.image_data[(i*4)+3] = rgba_val[3]
                 }
             
             
