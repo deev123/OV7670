@@ -175,90 +175,153 @@ class Picture
 let test_data = new Uint8Array([0b00000000,0b11111000,0b11100000,0b00000111,0b00011111,0b00000000]); // little endian
 let image = new Picture("canvas");
 
-// let port;
-// let reader;
-// let inputDone;
-// let outputDone;
-// let inputStream;
-// let outputStream;
-
-// const log = document.getElementById('log');
 
 
 
+
+
+
+
+
+let port;
+let reader;
+let inputDone;
+let outputDone;
+let inputStream;
+let outputStream;
+
+const log = document.getElementById('serial_rx_out_text_box');
+
+
+
+append_rx_out = function(value)
+{
+    log.value += String.fromCharCode(value);
+}
+
+print_stuff = function(value)
+{
+    console.log(String.fromCharCode(value));
+}
+
+
+
+const close_port = 0;
 // document.addEventListener('DOMContentLoaded', () =>
 // {
 //     const notSupported = document.getElementById('notSupported');
 //     notSupported.classList.toggle('hidden', 'serial' in navigator);
 // });
 
-// open_port = async function()
-// {
-//     port = await navigator.serial.requestPort();
-//     await port.open({ baudRate: 115200 });
-//     while (port.readable) {
-//         const reader = port.readable.getReader();
-//         try {
-//           while (true) {
-//             const { value, done } = await reader.read();
-//             if (done) {
-//               // |reader| has been canceled.
-//               break;
-//             }
-//             // Do something with |value|...
-//             //console.log(value);
-//             value.forEach((currentValue) => console.log(currentValue));
 
-//           }
-//         } catch (error) {
-//           // Handle |error|...
-//         } finally {
-//           reader.releaseLock();
-//         }
-//       }
-//     // console.log('Serial port opened successfully.');
-//     // console.log(port);
-//     // const reader = port.readable.getReader();
+open_port = async function()
+{
+    //setInterval(()=>{close_port = 1; console.log("port was closed by setinterval");}, 10000);
+    port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 115200, bufferSize: 100 });
 
-//     // let decoder = new TextDecoderStream();
-//     // port.readable.getReader().releaseLock();
-//     // port.writable.getWriter().releaseLock();
-//     // inputDone = port.readable.pipeTo(decoder.writable);
-//     // inputStream = decoder.readable;
-
-//     // reader = inputStream.getReader();
-//     // read_loop();
-
-// }
-
-// read_loop = async function()
-// {
-//     // while (true) {
-//     //     const { value, done } = await reader.read();
-//     //     if (value) {
-//     //       log.textContent += value + '\n';
-//     //     }
-//     //     if (done) {
-//     //       console.log('[readLoop] DONE', done);
-//     //       reader.releaseLock();
-//     //       break;
-//     //     }
-//     //   }
-// }
-
-// async function main()
-// {
-//     while(true)
-//     {
-
-//     }
-//     //infinite loop of
-//     //
-//     // listen to port
-//     // if received a new frame beginning marker then read data and draw frame
-//     // if 
     
-// }
+    // for(let i = 0; i < 140; i++)
+    let func = async function()
+    {
+        let reader = port.readable.getReader();
+        // const textDecoder = new TextDecoderStream();
+        // const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+        // const reader = textDecoder.readable.getReader();
+        if(port.readable)
+        {
+        
+            //await reader.read();
+            try
+            {
+                console.log("try");
+                while(true)
+                {
+                    let { value, done } = await reader.read();
+                    // if (done)
+                    // {
+                    //     console.log("done");
+                    //     return;
+                    // }
+                    // Do something with |value|...
+                    if(!done)
+                    {
+                        //console.log(value);
+                        value.forEach(append_rx_out);
+                        //value.forEach(print_stuff);
+                        console.log("reading");
+
+                    }
+                    else
+                    {
+                        console.log("done");
+                        return;
+                    }
+                }
+            
+
+            
+            }
+            catch (error)
+            {
+                console.log("catch");
+                console.log(error);
+                return;
+            }
+            finally
+            {
+                console.log("finally");
+                reader.releaseLock();
+            }
+        }
+        
+    }
+    
+    
+    setTimeout(func, 0);
 
 
-// main();
+
+    // console.log('Serial port opened successfully.');
+    // console.log(port);
+    // const reader = port.readable.getReader();
+
+    // let decoder = new TextDecoderStream();
+    // port.readable.getReader().releaseLock();
+    // port.writable.getWriter().releaseLock();
+    // inputDone = port.readable.pipeTo(decoder.writable);
+    // inputStream = decoder.readable;
+
+    // reader = inputStream.getReader();
+    // read_loop();
+
+}
+
+read_loop = async function()
+{
+    // while (true) {
+    //     const { value, done } = await reader.read();
+    //     if (value) {
+    //       log.textContent += value + '\n';
+    //     }
+    //     if (done) {
+    //       console.log('[readLoop] DONE', done);
+    //       reader.releaseLock();
+    //       break;
+    //     }
+    //   }
+}
+
+async function main()
+{
+    
+    //infinite loop of
+    //
+    // listen to port
+    // if received a new frame beginning marker then read data and draw frame
+    // if 
+    
+}
+
+
+main();

@@ -7,42 +7,137 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
 <style>
+
+    :root
+    {
+        --border-radius: 8px;
+        --controls-background-colour: #ededed;
+        --text-colour: #3f3f3f;
+        --button-colour: rgb(255, 255, 255);
+        --controls-border: 1px solid #b3b3b3;
+        --controls-group-border-radius: 1px solid #b3b3b3;
+        --controls-group-box-shadow: 1px 1px 3px rgb(194, 194, 194);
+    }
+
+    body
+    {
+        text-align: center;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .content
+    {
+        display: inline-block;
+        text-align: center;
+        width: 90%;
+    }
+
+    .data-source__tabs
+    {
+        text-align: left;
+        display: block;
+        height: 38px;
+        /* border: var(--controls-border); */
+        /* padding: 5px; */
+        margin: 9px;
+        margin-bottom: 0px;
+        margin-top: 13px;
+    }
+
+    .data-source__tabs .tab
+    {
+        float:left;
+        border: none;
+        margin: 0px;
+        border: var(--controls-border);
+        border-radius: 2px;
+        padding: 10px;
+    }
+
+    .data-source__tabs .tab.active
+    {
+        color:rgb(0, 0, 0);
+        background-color: #d9d9d9;
+    }
+
+    .data-source__tabs .tab:not(.active):hover
+    {
+        background-color: rgb(240, 240, 240);
+        cursor: pointer;
+    }
+
+    .controls-group
+    {
+        text-align: left;
+        padding:15px;
+        background-color: #ededed;
+        border: var(--controls-border);
+        margin:9px;
+        margin-top: 0px;
+        box-shadow: var(--controls-group-box-shadow);
+        border-radius: 3px;
+    }
+    
     .canvas
     {
+        margin:30px;
         border: solid 1px black;
-        width:1000px;
+        width:90%;
         image-rendering: pixelated;
         image-rendering: crisp-edges;
         clear:both;
-        float:left;
+        background-color: black;
     }
-    .command_button
+
+    .label-top
     {
-        float:left;
-        clear:both;
-        margin:5px;
+        margin-bottom: 4px;
+        display: block;
     }
-    .input_group
+
+    .label-left
     {
-        vertical-align: top;
-        float:left;
-        clear:both;
-        margin:10px;
+        display: inline-block;
     }
-    .render_button
+
+    .data-input-box
     {
-        vertical-align: top;
+        color: #d1d1d1;
+        background-color: black;
     }
-    #buttons
+
+    button, .small-text-input
     {
-        float:left;
-        clear:both;
-        margin:10px;
+        color: var(--text-colour);
+        background-color: var(--button-colour);
+        border: var(--controls-border);
+        padding: 5px;
+        border-radius: var(--border-radius);
+        margin: 5px;
     }
-    label
+
+    button:hover
     {
-        vertical-align: top;;
+        transform: scale(1.02);
+        background-color: rgb(240, 240, 240);
+        cursor: pointer;
     }
+
+    .input-and-label
+    {
+        display: inline-block;
+        margin-right: 30px;
+    }
+
+    /* .data-source__tabs button
+    {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    } */
+
+    
 </style>
 
 </head>
@@ -51,37 +146,132 @@
 
     
 
-    <h1>OV7670 camera terminal</h1>
+    <h1 style="text-align: center;">OV7670 camera terminal</h1>
 
-    <div class="input_group">
-    <label for="hex_input_box">RGB565 hex input:</label>
-    <textarea id="hex_input_box" rows="10" cols="50" placeholder="Put hex data in here and click Render Hex Data to visualise..."></textarea>
-    <button id="render_button" class="render_button" onclick="render_hex_data()">Render Hex Data</button>
-    </div>
+    <div class="content">
 
-    <div class="input_group">
-        <label for="byte_offset">Byte Offset</label>
-        <input type="number" id="byte_offset" name="byte_offset" onchange="image.data_buf_offset=parseInt(this.value,10); image.render();">
+
+
+
+        <div class="controls-group">
+
+            <label for="serial-text-input">Serial in:</label>
+            <input id="serial-text-input" type="text" class="small-text-input">
+
+            <button onclick="">Send</button>
+
+            <!-- TODO: Add some buttons to send more commands -->
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Select the source of the image data -->
+        <div class="data-source">
+
+
+            <!-- Two options for data source for visualiser: manual paste data, or listen to a serial port, or example data with an example image or simulated serial stream to paste in -->
+            <div id="select-data-source" class="data-source__tabs">
+                <button class="tab active" data-tab="paste-data" onclick="setDataSourceTab(event, 'paste-data')">Paste Data</button>
+                <button class="tab" data-tab="listen-to-serial" onclick="setDataSourceTab(event, 'listen-to-serial')">Listen to Serial</button>
+                <button class="tab" data-tab="example-data" onclick="setDataSourceTab(event, 'example-data')">Example Data</button>
+            </div>
+
+
+            <div id="data-source-content">
+
+
+                <div class="controls-group" data-tab="paste-data">
+                    <label for="hex-input-box" class="label-top">RGB565 hex input:</label>
+                    <textarea id="hex-input-box" class="data-input-box" rows="10" cols="50" placeholder="Put hex data in here and click Render Hex Data to visualise..."></textarea>
+                    <div>
+                        <button onclick="renderHexData()">Render Hex Data</button>
+                    </div>
+                </div>
+
+                <div class="controls-group" data-tab="listen-to-serial" style="display: none">
+                    <label for="serial-rx-out-text-box" class="label-top">Serial Out:</label>
+                    <textarea id="serial-rx-out-text-box" class="data-input-box" rows="10" cols="50" placeholder="Start Listening to serial and data will show in this box..."></textarea>
+                    <div>
+                        <button onclick="">Start Listening</button> <!--toggles between start lkistening and stop listening-->
+                        <button onclick="">Clear</button>
+                    </div>
+                </div>
+
+                <div class="controls-group" data-tab="example-data" style="display: none"></div>
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="controls-group render-settings">
+
+            <div class="input-and-label">
+            <label for="render-width">Image Width:</label>
+            <input id="render-width" type="number" class="small-text-input" value="640" oninput="image.resize(parseInt(this.value,10), image.canvas.height); image.render();">
+            </div>
+            <div class="input-and-label">
+                <label for="render-height">Image Height:</label>
+                <input id="render-height" type="number" class="small-text-input" value="480" oninput="image.resize(image.canvas.width, parseInt(this.value,10)); image.render();">
+            </div>
+
+            <div class="input-and-label">
+            <label for="byte-offset">Byte Offset</label>
+            <input id="byte-offset" type="number" class="small-text-input" name="byte-offset" oninput="image.dataBufOffset=parseInt(this.value,10); image.render();">
+            </div>
+
+            <div class="input-and-label">
+            <div class="input-and-label">
+            <label for="big-endian">Big Endian</label>
+            <input id="big-endian" type="radio" id="big-endian" name="big-or-little-endian" value="big endian" checked onchange="image.bigEndian=true; image.render();">
+            </div>
+
+            <div class="input-and-label">
+            <label for="little-endian">Little Endian</label>
+            <input id="little-endian" type="radio" id="little-endian" name="big-or-little-endian" value="little endian" onchange="image.bigEndian=false; image.render();">
+            </div>
+            </div>
+
+        </div>
+
         
-        <label for="big_endian">Big Endian</label>
-        <input type="radio" id="big_endian" name="big_or_little_endian" value="big endian" checked onchange="image.big_endian=true; image.render();">
-        <label for="little_endian">Little Endian</label>
-        <input type="radio" id="little_endian" name="big_or_little_endian" value="little endian" onchange="image.big_endian=false; image.render();">
-    </div>
 
-    <div class="input_group">
-    <label for="serial_input">Serial in:</label>
-    <input type="text" id="serial_input">
-    </div>
 
-    <div class="input_group">
-    <button class="command_button" onclick="open_port()">Open Port</button>
-    <button class="command_button" onclick="take_picture()">Take picture</button>
+
+        <div class="controls-group">
+        <button onclick="openPort()">Open Port</button>
+        <button onclick="takePicture()">Take picture</button>
+        </div>
+        <canvas class="canvas" id="canvas" width="640px" height="480px"></canvas>
     </div>
-    <canvas class="canvas" id="canvas" width="640px" height="1000px"></canvas>
+    
 
 </body>
 
-<script src="scripts.js"></script>
+<!-- <script src="scripts.js"></script> -->
+<script src="rendering.js"></script>
+<script src="ui.js"></script>
 
 </html>
