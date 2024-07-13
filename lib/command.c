@@ -3,12 +3,8 @@
 #include "pico/binary_info.h"
 #include "command.h"
 #include "helpers.h"
+#include <string.h>
 
-const char* commands[] =
-{
-"AT\r\n",
-"AT+GREET\r\n"
-};
 
 signed char command_buffer[COMMAND_BUF_SIZE];
 ring_buf_t command_buf;
@@ -16,13 +12,12 @@ ring_buf_t command_buf;
 void command_buf_init()
 {
     ring_buf_init(&command_buf, command_buffer, COMMAND_BUF_SIZE);
+    // assign the command function pointers here?
 }
 
 
 void command_parse(char* output_buf)
 {
-    // char[20] command;
-    // go backwards until the previous \n
     uint8_t i = 0;
     while(command_buf.head != command_buf.tail)   // tail is the next char so this loop works
     {
@@ -50,11 +45,13 @@ void command_process()
         }
         ring_buf_push(&command_buf, c);
         //printf("got[%c]\r\n", c);
-        if(command_buf.buf[ring_buf_index_decr(&command_buf, command_buf.tail)] == '\n') //if the latest character is \n
+        if(command_buf.buf[ring_buf_index_decr(&command_buf, command_buf.tail)] == '\r') //if the latest character is \n
         {
+            //printf("\n");
             //printf("processing command...\r\n");
             signed char command[command_buf.size + 1];
             command_parse(command);
+            command_execute(command);
             //command is now a normal c string with just the command
             //printf("entire buffer:\r\n[\r\n");
             // for(uint8_t i = 0; i < command_buf.size; i++)
@@ -63,7 +60,7 @@ void command_process()
             // }
             // printf("]\r\n");
             helpers_sub_special_chars(command, command_buf.size + 1);
-            printf("got command \"%s\"\r\n", command);
+            //printf("received command \"%s\"\r\n", command);
 
             //TODO: edit out backspace characters
             //excecute command here
@@ -73,4 +70,60 @@ void command_process()
 
     //see if any commmand is in commandbuf
     //x = getchar();
+}
+
+
+void command_execute(signed char* cmd)
+{
+    uint8_t i = 0;
+
+    // get the first part of the command: the command name
+    char command_name[15];
+    while(cmd[i] != '=' && cmd[i] != '\r')
+    {
+        command_name[i] = cmd[i];
+        i++;
+    }
+    command_name[i] = '\0';
+
+    if(strcmp(command_name, "AT") == 0)
+    {
+        command_respond_ok();
+    }
+
+    // find a match for the command in the command list
+
+    // work out how many arguments to expect
+
+    //parse the arguments
+
+    //call the function for the command
+
+
+
+
+}
+
+
+void command_respond_ok()
+{
+    printf("OK\r\n");
+}
+
+
+void command_set_register(uint8_t reg_addr, uint8_t value)
+{
+
+}
+
+
+void command_read_register(uint8_t reg_addr)
+{
+
+}
+
+
+void command_picture_default()
+{
+
 }

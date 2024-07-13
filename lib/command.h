@@ -22,3 +22,13 @@ void command_process();
  * UNSAFE! output_buf should be 1 index larger than command_buf to ensure it can never overflow (to accommodate string \0 terminator)
  */
 void command_parse(char* output_buf);
+
+void command_execute(signed char* cmd);
+
+void command_respond_ok();
+
+void command_set_register(uint8_t reg_addr, uint8_t value);
+
+void command_read_register(uint8_t reg_addr);
+
+void command_picture_default();
