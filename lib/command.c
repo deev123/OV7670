@@ -2,6 +2,7 @@
 #include "pico/stdlib.h"
 #include "pico/binary_info.h"
 #include "command.h"
+#include "helpers.h"
 
 const char* commands[] =
 {
@@ -42,22 +43,30 @@ void command_process()
         signed char c = getchar_timeout_us(0);
         if (c == -1) return;
 
+        //if c is a backspace then decrement head
+        if(c == '\b')
+        {
+            command_buf.tail = ring_buf_index_decr(&command_buf, command_buf.tail);
+        }
         ring_buf_push(&command_buf, c);
-        printf("got[%c]\r\n", c);
+        //printf("got[%c]\r\n", c);
         if(command_buf.buf[ring_buf_index_decr(&command_buf, command_buf.tail)] == '\n') //if the latest character is \n
         {
-            printf("processing command:\r\n");
+            //printf("processing command...\r\n");
             signed char command[command_buf.size + 1];
             command_parse(command);
             //command is now a normal c string with just the command
-            printf("entire buffer:\r\n[\r\n");
-            for(uint8_t i = 0; i < command_buf.size; i++)
-            {
-                printf("%c\r\n", command_buf.buf[i]);
-            }
-            printf("]\r\n");
-            
-            printf("got command[%s]\r\n", command);
+            //printf("entire buffer:\r\n[\r\n");
+            // for(uint8_t i = 0; i < command_buf.size; i++)
+            // {
+            //     printf("%c\r\n", command_buf.buf[i]);
+            // }
+            // printf("]\r\n");
+            helpers_sub_special_chars(command, command_buf.size + 1);
+            printf("got command \"%s\"\r\n", command);
+
+            //TODO: edit out backspace characters
+            //excecute command here
             
         }
     }	
