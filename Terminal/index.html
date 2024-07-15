@@ -17,6 +17,7 @@
         --controls-border: 1px solid #b3b3b3;
         --controls-group-border-radius: 1px solid #b3b3b3;
         --controls-group-box-shadow: 1px 1px 3px rgb(194, 194, 194);
+        --data-input-box-background: rgb(0, 0, 0);
     }
 
     body
@@ -102,8 +103,12 @@
 
     .data-input-box
     {
+        display: block;
         color: #d1d1d1;
-        background-color: black;
+        background-color: var(--data-input-box-background);
+        width: 99.3%;
+        resize: none;
+        margin-right: 10px;
     }
 
     button, .small-text-input
@@ -127,6 +132,7 @@
     {
         display: inline-block;
         margin-right: 30px;
+        margin-bottom: 20px;
     }
 
     /* .data-source__tabs button
@@ -192,7 +198,7 @@
 
                 <div class="controls-group" data-tab="paste-data">
                     <label for="hex-input-box" class="label-top">RGB565 hex input:</label>
-                    <textarea id="hex-input-box" class="data-input-box" rows="10" cols="50" placeholder="Put hex data in here and click Render Hex Data to visualise..."></textarea>
+                    <textarea id="hex-input-box" class="data-input-box" rows="10" cols="50" oninput="renderHexData()" placeholder="Put hex data in here and click Render Hex Data to visualise..."></textarea>
                     <div>
                         <button onclick="renderHexData()">Render Hex Data</button>
                     </div>
