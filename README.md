@@ -1,10 +1,18 @@
 # OV7670 Library for the RP2040 Raspberry Pi Pico
 
-This repo includes firmware for the OV7670 camera sensor module and a Web application for interfacing with it.
+## Preface
+TODO: Add information about what the sensor is and how it works
 
-The 'Terminal' directory contains the Web application for visualising data from and sending data to the camera
+## Repo
+This repo includes:
+Firmware for the OV7670 camera sensor module
+A Web application for interfacing with it.
+A python serial server which is used by the Web application to communicate with the sensor
 
-TODO: Move cmake stuff into a separate directory so theres separate firmware and terminal folders. Then separate library from firmware. A directory for uf2 firmware build too?
+The 'Terminal' directory contains the Web application for visualising data from and sending data to the camera, as well as the python 
+server which should be run locally to allow the website access to a serial port
+
+TODO: A directory for uf2 firmware build too?
 
 
 
