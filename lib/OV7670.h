@@ -100,3 +100,5 @@ uint8_t OV7670_read_data_bus();
 void OV7670_output_8_bar_color_test_pattern();
 
 void OV7670_get_next_frame_buf();
+
+void OV7670_quick_frame();

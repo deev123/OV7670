@@ -4,6 +4,7 @@
 #include "command.h"
 #include "helpers.h"
 #include <string.h>
+#include "OV7670.h"
 
 
 signed char command_buffer[COMMAND_BUF_SIZE];
@@ -38,11 +39,22 @@ void command_process()
         signed char c = getchar_timeout_us(0);
         if (c == -1) return;
 
+        // TODO: filter out characters we dont want like invisible or special characters other than \r etc?
+
         //if c is a backspace then decrement head
-        if(c == '\b')
+        if(c == '\b' || c == 127)  //127 is the delete character which putty uses by default
         {
-            command_buf.tail = ring_buf_index_decr(&command_buf, command_buf.tail);
+            if(command_buf.tail == command_buf.head)
+            {
+                command_buf.tail = command_buf.head = ring_buf_index_decr(&command_buf, command_buf.tail);
+            }
+            else
+            {
+                command_buf.tail = ring_buf_index_decr(&command_buf, command_buf.tail);
+            }
+            return;
         }
+
         ring_buf_push(&command_buf, c);
         //printf("got[%c]\r\n", c);
         if(command_buf.buf[ring_buf_index_decr(&command_buf, command_buf.tail)] == '\r') //if the latest character is \n
@@ -51,6 +63,7 @@ void command_process()
             //printf("processing command...\r\n");
             signed char command[command_buf.size + 1];
             command_parse(command);
+            helpers_upper_case(command);
             command_execute(command);
             //command is now a normal c string with just the command
             //printf("entire buffer:\r\n[\r\n");
@@ -75,20 +88,89 @@ void command_process()
 
 void command_execute(signed char* cmd)
 {
-    uint8_t i = 0;
+    // uint8_t i = 0;
 
-    // get the first part of the command: the command name
-    char command_name[15];
-    while(cmd[i] != '=' && cmd[i] != '\r')
+    // // get the first part of the command: the command name
+    // char command_name[15];
+    // while(cmd[i] != '=' && cmd[i] != '\r')
+    // {
+    //     command_name[i] = cmd[i];
+    //     i++;
+    // }
+    // command_name[i] = '\0';
+    char delims[] = " \r";
+
+    char copy[strlen(cmd) + 1];
+    char* token;
+
+    // print all the interpreted tokens for debugging purposes:
+    strcpy(copy, cmd);
+    token = strtok(copy, delims);
+    printf("tokens: ");
+    while(token != NULL)
     {
-        command_name[i] = cmd[i];
-        i++;
+        printf("[%s]", token);
+        token = strtok(NULL, delims);
     }
-    command_name[i] = '\0';
+    printf("\r\n");
 
-    if(strcmp(command_name, "AT") == 0)
+    strcpy(copy, cmd);
+    token = strtok(copy, delims);
+
+    // execute:
+
+    if(strcmp(token, "AT") == 0)
     {
         command_respond_ok();
+    }
+
+    else if(strcmp(token, "GETREG") == 0)
+    {
+        uint8_t reg = 0;
+        token = strtok(NULL, delims);
+        if(token != NULL)
+        {
+            reg = helpers_to_num(token);
+        }
+        printf("%u", OV7670_read_register(reg));
+    }
+
+    else if(strcmp(token, "SETREG") == 0)
+    {
+        uint8_t reg = 0;
+        token = strtok(NULL, delims);
+        if(token != NULL)
+        {
+            reg = helpers_to_num(token);
+        }
+        
+        uint8_t value = 0;
+        token = strtok(NULL, delims);
+        if(token != NULL)
+        {
+            value = helpers_to_num(token);
+        }
+
+        printf("setting register %d to %d\r\n", reg, value);
+
+        OV7670_write_register(reg, value);
+        printf("%u", OV7670_read_register(reg));
+
+        // respond something like: register x = x
+        //command_respond_ok();
+    }
+
+    else if(strcmp(token, "PIC") == 0)
+    {
+        printf("\r\n\r\n");
+        OV7670_quick_frame();
+        //OV7670_get_next_frame_buf();
+        OV7670_print_frame_buf();
+        // OV7670_get_next_frame_buf();
+        // OV7670_print_frame_buf();
+        // 0 args is default
+        // otherwise the argument is a variation of the function
+        
     }
 
     // find a match for the command in the command list
@@ -111,19 +193,19 @@ void command_respond_ok()
 }
 
 
-void command_set_register(uint8_t reg_addr, uint8_t value)
-{
+// void command_set_register(token)
+// {
 
-}
-
-
-void command_read_register(uint8_t reg_addr)
-{
-
-}
+// }
 
 
-void command_picture_default()
-{
+// void command_read_register(uint8_t reg_addr)
+// {
 
-}
+// }
+
+
+// void command_picture_default()
+// {
+
+// }

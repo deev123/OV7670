@@ -156,6 +156,58 @@ uint8_t OV7670_read_data_bus()
 }
 
 
+void OV7670_quick_frame()  // scale argument for taking apicture using every second or every 4th pixel etc
+{
+    OV7670_frame_buf_size = 0;
+    uint32_t pbyte = 0;
+
+    while(!gpio_get(VS)); //wait for vsync high        // this is not very good because there is no way out of a failure here
+    while(gpio_get(VS));  //wait for vsync low
+
+    while(true) //while in the vsync low phase
+    {   
+        while(!gpio_get(HS))  //wait for href to go high for row. Vsync may go high while href is low to designate the start of a new frame
+        {
+            if(gpio_get(VS)) //vsync may go high while href is low signifying the end of a frame in which case we end the frame capturing function
+            {
+                OV7670_current_pbyte = 0;
+                return;
+            }
+        }
+        while(gpio_get(HS))  //while in href
+        {
+            while(!gpio_get(PLK));  // wait for pixel plk pulse
+
+            //capture frame here
+            if(pbyte >= OV7670_current_pbyte) //framebuf can start
+            {
+                //pixel is within the new framebuf so add onto framebuf if not full
+                if(OV7670_frame_buf_size < sizeof(OV7670_frame_buf))
+                {
+                    if(((pbyte / 1280) % 4 == 0) && ((pbyte / 2) % 4 == 0))  // only add every other pixel of every other row to reduce size 1280 is 640 * 2 since every pixel is 2 bytes so a rowis 1280 bytes
+                    {
+                        OV7670_frame_buf[OV7670_frame_buf_size] = OV7670_read_data_bus();
+                        OV7670_current_pbyte++;
+                        OV7670_frame_buf_size++;
+                    }
+                }
+                else // else framebuf is full so return and keep current OV7670_current_pbyte
+                {
+                    return;
+                }
+                
+            }
+            pbyte++;
+
+            while(gpio_get(PLK)) //necessary to prevent reading the same pixel
+            {
+            }
+        }
+        
+
+    }
+}
+
 // TODO: In progress...
 void OV7670_capture_frame(uint16_t width, uint16_t height)     // TODO: Make work with for loops to allow it to exit from failed capture
 {
