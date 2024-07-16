@@ -57,3 +57,27 @@ let setOffset = function(offset)
 {
 
 }
+
+
+let restartSerial = function()
+{
+    serial.restartSerial()
+    .then(result => {serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData()})
+    .catch((error) => console.error(error)); 
+}
+
+let readSerial = function()
+{
+    serial.readSerial()
+    .then(result => {serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData()})
+    .catch((error) => console.error(error)); 
+
+}
+
+let sendSerial = function(tx)
+{
+    serial.sendSerial(tx + "\r")
+    .then(result => {serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData()})   //response is sent back
+    .catch((error) => console.error(error)); 
+
+}

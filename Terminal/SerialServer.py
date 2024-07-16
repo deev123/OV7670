@@ -64,7 +64,7 @@ def init_port(port):
         serial_port.close()
     try:
         serial_port = serial.Serial(port=com_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-        serial_port.set_buffer_size(rx_size = 12800, tx_size = 50)
+        serial_port.set_buffer_size(rx_size = 128000, tx_size = 50)
         print("Listening to " + str(com_port))
     except:
         print("error: Could not open port " + str(com_port))

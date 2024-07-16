@@ -159,16 +159,15 @@
 
 
 
-        <div class="controls-group">
+        <!-- <div class="controls-group">
 
             <label for="serial-text-input">Serial in:</label>
             <input id="serial-text-input" type="text" class="small-text-input">
 
             <button onclick="">Send</button>
 
-            <!-- TODO: Add some buttons to send more commands -->
 
-        </div>
+        </div> -->
 
 
 
@@ -187,16 +186,16 @@
 
             <!-- Two options for data source for visualiser: manual paste data, or listen to a serial port, or example data with an example image or simulated serial stream to paste in -->
             <div id="select-data-source" class="data-source__tabs">
-                <button class="tab active" data-tab="paste-data" onclick="setDataSourceTab(event, 'paste-data')">Paste Data</button>
-                <button class="tab" data-tab="listen-to-serial" onclick="setDataSourceTab(event, 'listen-to-serial')">Listen to Serial</button>
+                <button class="tab" data-tab="paste-data" onclick="setDataSourceTab(event, 'paste-data')">Paste Data</button>
+                <button class="tab active" data-tab="listen-to-serial" onclick="setDataSourceTab(event, 'listen-to-serial')">Listen to Serial</button>
                 <button class="tab" data-tab="example-data" onclick="setDataSourceTab(event, 'example-data')">Example Data</button>
             </div>
 
 
             <div id="data-source-content">
 
-
-                <div class="controls-group" data-tab="paste-data">
+                <!-- Section for copy and pasting bytes to render -->
+                <div class="controls-group" data-tab="paste-data" style="display: none">
                     <label for="hex-input-box" class="label-top">RGB565 hex input:</label>
                     <textarea id="hex-input-box" class="data-input-box" rows="10" cols="50" oninput="renderHexData()" placeholder="Put hex data in here and click Render Hex Data to visualise..."></textarea>
                     <div>
@@ -204,8 +203,16 @@
                     </div>
                 </div>
 
-                <div class="controls-group" data-tab="listen-to-serial" style="display: none">
-                    <label for="serial-rx-out-text-box" class="label-top">Serial Out:</label>
+                <!-- Section for communicating with camera via serial-->
+                <div class="controls-group" data-tab="listen-to-serial">
+                    <button onclick="restartSerial()">Open</button>   <!-- TODO: Make this grey out the rest when not opened successfully -->
+                    <label for="serial-text-input">TX:</label>
+                    <input id="serial-text-input" type="text" class="small-text-input">
+                    <!-- <button onclick="document.getElementById('serial-text-input').value += '\r'">&lt;CR&gt;</button> -->
+                    <button onclick="sendSerial(document.getElementById('serial-text-input').value)">Send</button>
+                    <button onclick="readSerial()">ReadLine</button>
+
+                    <label for="serial-rx-out-text-box" class="label-top">RX:</label>
                     <textarea id="serial-rx-out-text-box" class="data-input-box" rows="10" cols="50" placeholder="Start Listening to serial and data will show in this box..."></textarea>
                     <div>
                         <button onclick="">Start Listening</button> <!--toggles between start lkistening and stop listening-->
@@ -213,6 +220,7 @@
                     </div>
                 </div>
 
+                <!-- TODO: Simulated data which doesnt require the server to be running -->
                 <div class="controls-group" data-tab="example-data" style="display: none"></div>
 
 
@@ -236,11 +244,11 @@
 
             <div class="input-and-label">
             <label for="render-width">Image Width:</label>
-            <input id="render-width" type="number" class="small-text-input" value="640" oninput="image.resize(parseInt(this.value,10), image.canvas.height); image.render();">
+            <input id="render-width" type="number" class="small-text-input" value="160" oninput="image.resize(parseInt(this.value,10), image.canvas.height); image.render();">
             </div>
             <div class="input-and-label">
                 <label for="render-height">Image Height:</label>
-                <input id="render-height" type="number" class="small-text-input" value="480" oninput="image.resize(image.canvas.width, parseInt(this.value,10)); image.render();">
+                <input id="render-height" type="number" class="small-text-input" value="120" oninput="image.resize(image.canvas.width, parseInt(this.value,10)); image.render();">
             </div>
 
             <div class="input-and-label">
@@ -270,13 +278,14 @@
         <button onclick="openPort()">Open Port</button>
         <button onclick="takePicture()">Take picture</button>
         </div>
-        <canvas class="canvas" id="canvas" width="640px" height="480px"></canvas>
+        <canvas class="canvas" id="canvas" width="160px" height="120px"></canvas>
     </div>
     
 
 </body>
 
 <!-- <script src="scripts.js"></script> -->
+<script src="serial.js"></script>
 <script src="rendering.js"></script>
 <script src="ui.js"></script>
 
