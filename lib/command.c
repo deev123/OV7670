@@ -104,15 +104,15 @@ void command_execute(signed char* cmd)
     char* token;
 
     // print all the interpreted tokens for debugging purposes:
-    strcpy(copy, cmd);
-    token = strtok(copy, delims);
-    printf("tokens: ");
-    while(token != NULL)
-    {
-        printf("[%s]", token);
-        token = strtok(NULL, delims);
-    }
-    printf("\r\n");
+    // strcpy(copy, cmd);
+    // token = strtok(copy, delims);
+    // printf("tokens: ");
+    // while(token != NULL)
+    // {
+    //     printf("[%s]", token);
+    //     token = strtok(NULL, delims);
+    // }
+    // printf("\r\n");
 
     strcpy(copy, cmd);
     token = strtok(copy, delims);
@@ -151,7 +151,7 @@ void command_execute(signed char* cmd)
             value = helpers_to_num(token);
         }
 
-        printf("setting register %d to %d\r\n", reg, value);
+        //printf("setting register %d to %d\r\n", reg, value);
 
         OV7670_write_register(reg, value);
         printf("%u", OV7670_read_register(reg));
@@ -162,7 +162,7 @@ void command_execute(signed char* cmd)
 
     else if(strcmp(token, "PIC") == 0)
     {
-        printf("\r\n\r\n");
+        //printf("\r\n\r\n");
         OV7670_quick_frame();
         //OV7670_get_next_frame_buf();
         OV7670_print_frame_buf();
@@ -189,7 +189,7 @@ void command_execute(signed char* cmd)
 
 void command_respond_ok()
 {
-    printf("OK\r\n");
+    printf("OK\r");
 }
 
 
