@@ -121,7 +121,8 @@ void command_execute(signed char* cmd)
 
     if(strcmp(token, "AT") == 0)
     {
-        command_respond_ok();
+        //command_respond_ok();
+        command_respond("OK", 2);
     }
 
     else if(strcmp(token, "GETREG") == 0)
@@ -132,7 +133,11 @@ void command_execute(signed char* cmd)
         {
             reg = helpers_to_num(token);
         }
-        printf("%u", OV7670_read_register(reg));
+        //printf("%u\r", OV7670_read_register(reg));
+
+        signed char rsp[50];
+        sprintf(rsp, "%u", OV7670_read_register(reg));
+        command_respond(rsp, strlen(rsp));
     }
 
     else if(strcmp(token, "SETREG") == 0)
@@ -154,7 +159,11 @@ void command_execute(signed char* cmd)
         //printf("setting register %d to %d\r\n", reg, value);
 
         OV7670_write_register(reg, value);
-        printf("%u", OV7670_read_register(reg));
+        //printf("%u\r", OV7670_read_register(reg));
+        
+        signed char rsp[50];
+        sprintf(rsp, "%u", OV7670_read_register(reg));
+        command_respond(rsp, strlen(rsp));
 
         // respond something like: register x = x
         //command_respond_ok();
@@ -165,12 +174,27 @@ void command_execute(signed char* cmd)
         //printf("\r\n\r\n");
         OV7670_quick_frame();
         //OV7670_get_next_frame_buf();
-        OV7670_print_frame_buf();
+        // signed char *ptr = (signed char *)&OV7670_frame_buf_size; // to print 32 bit int as 4 bytes
+        // for(uint8_t i = 0; i < 4; i++)
+        // {
+        //     putchar(ptr[i]);
+        // }
+        //OV7670_print_frame_buf();
+
+        //command_send_test();
+        command_respond(OV7670_frame_buf, OV7670_frame_buf_size);
+
+        //printf("\r");
         // OV7670_get_next_frame_buf();
         // OV7670_print_frame_buf();
         // 0 args is default
         // otherwise the argument is a variation of the function
         
+    }
+
+    else if(strcmp(token, "TESTPIC") == 0)
+    {
+        command_send_test();
     }
 
     // find a match for the command in the command list
@@ -190,6 +214,50 @@ void command_execute(signed char* cmd)
 void command_respond_ok()
 {
     printf("OK\r");
+}
+
+void command_respond(signed char* payload, uint32_t size)
+{
+    signed char *ptr = (signed char *)&size; // to print 32 bit int as 4 bytes
+    for(int8_t i = 3; i >= 0; i--)
+    {
+        putchar(ptr[i]);
+    }
+    for(uint32_t i = 0; i < size; i++)
+    {
+        putchar(payload[i]);
+    }
+}
+
+void command_send_test()
+{
+    // just a red image
+    uint32_t size = 38400;
+    signed char *ptr = (signed char *)&size;
+    for(int8_t i = 3; i >= 0; i--)
+    {
+        putchar(ptr[i]);
+    }
+    for(uint32_t i = 0; i < size / 2; i++)
+    {
+        uint16_t xpos = i % 160;
+        if(xpos < (160 / 3))    // red on left side
+        {
+            putchar(0b11111000);
+            putchar(0x00);
+        }
+        else if(xpos >= ((160 / 3)) * 2)  // blue on right side
+        {
+            putchar(0b0000000);
+            putchar(0b0001111);
+        }
+        else
+        {
+            putchar(0b0000111);
+            putchar(0b1110000);
+        }
+        
+    }
 }
 
 

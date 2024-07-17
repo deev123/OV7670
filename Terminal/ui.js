@@ -63,21 +63,61 @@ let restartSerial = function()
 {
     serial.restartSerial()
     .then(result => {serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData()})
-    .catch((error) => console.error(error)); 
+    .catch((error) => console.error(error));
 }
 
 let readSerial = function()
 {
     serial.readSerial()
-    .then(result => {serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData()})
+    .then(result => {console.log(result); serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData();})
     .catch((error) => console.error(error)); 
 
 }
 
 let sendSerial = function(tx)
 {
-    serial.sendSerial(tx + "\r")
+    return serial.sendSerial(tx + "\r")
     .then(result => {serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData()})   //response is sent back
+    .then(readSerial())
     .catch((error) => console.error(error)); 
+}
 
+let sendAndReceive = async function(tx)
+{
+    console.log("sendAndReceive");
+    await serial.sendSerial(tx + "\r"); // writes, then sends back empty string
+
+    await serial.readSerial()  // returns the data on the rx serial buffer
+    .then(result => {console.log(result); serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData();})   //response is sent back
+    //.then(readSerial())
+    .catch((error) => console.error(error)); 
+}
+
+let isStreaming = false;
+let toggleStream = async function()
+{
+    if(isStreaming)
+    {
+        isStreaming = false;
+    }
+    else
+    {
+        isStreaming = true;
+        constantStream();
+    }
+}
+
+let constantStream = async function()
+{
+    console.log("streaming");
+    while(isStreaming)
+    {
+        await takePic();
+        //await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+}
+
+let takePic = async function()
+{
+    await sendAndReceive("PIC");
 }

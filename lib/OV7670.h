@@ -24,6 +24,7 @@
 
 extern uint8_t OV7670_frame_buf[70800];
 extern uint32_t OV7670_frame_buf_current_pixel;
+extern uint32_t OV7670_frame_buf_size;
 
 /**
  * Call this before any other function from OV7670 library

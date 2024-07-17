@@ -7,6 +7,7 @@ from flask import Flask, request, jsonify
 import argparse
 from collections import deque
 from flask_cors import CORS, cross_origin
+import time
 
 
 app = Flask(__name__)
@@ -29,41 +30,93 @@ def update_buffer():
 
 @app.route("/")
 def index():
+    print("\033[93mRecived GET / request. Restarting serial\033[0m")
     init_port(com_port)
     return "request '/serial' to receive serial data"
 
 @app.route('/send', methods=['POST'])
 def send_serial():
+    print("\033[93mRecived POST /send request.\nSending back empty 200 response.\033[0m")
     #print(request.data)
     data = request.data.decode('utf-8')
     # for key, value in data.items():
     #     print(f"Argument '{key}': {value}")
-    print("sending: \033[92m" + data + "\033[0m")
+    print("\033[93mWriting to serial: \033[92m" + data + "\033[0m")
     serial_port.write(request.data)
-    return jsonify({"message": "Data sent successfully"}), 200
+    return "", 200
     #pass
+
+import struct
+
+def get_response():
+    length = 0
+    start_time = time.time()
+
+    rx = serial_port.read(4)
+    length = int.from_bytes(rx)
+    #print(str(length))
+    print("\033[93mRead serial packet size \033[96m" + str(rx) + "\033[93m as: \033[96m" + str(length) + "\033[0m")
+    rx = bytearray()
+    time.sleep(1)
+
+    half = int(length/2)
+    #for i in range(length):
+    rx += serial_port.read(half)
+    rx += serial_port.read(length - half)
+    
+    #rx += serial_port.read(1)  # the \r character
+
+    hex_representation = ''.join(struct.pack('B', x).hex() for x in rx)  #''.join(format(byte, '02x') for byte in rx)
+    print("\033[93mSending back response:\033[0m")
+    print("\033[96m" + hex_representation + "\033[0m")
+    return hex_representation
+    return rx
+
+
+    while True:
+
+        rx += serial_port.read(1)
+        data += rx
+        if rx == '\r' or (time.time() - start_time > 8):
+            return data
 
 @app.route("/serial")
 def get_serial():
-    size = serial_port.in_waiting
-    if size > 0:
-        rx = serial_port.readline(size)
-        return rx.decode("Ascii")
-        try:
-            global buffer
-            buffer += rx.decode("Ascii")
-            return buffer
-        except:
-            return "error"
-    else: return "error"
-    
+    print("\033[93mRecived GET /serial request")
+
+    return get_response()   # flask assumes 200 when sending something back
+
+
+    # data = ""
+    # size = 1 #serial_port.in_waiting
+    # start_time = time.time()
+
+    # while True:
+    #     rx = serial_port.read().decode("Ascii")
+    #     data += rx
+    #     if rx == '\r' or (time.time() - start_time > 5):
+    #         return data
+
+    # old
+    # if size > 0:
+    #     rx = serial_port.readline()
+    #     return rx.decode("Ascii")
+    #     try:
+    #         global buffer
+    #         buffer += rx.decode("Ascii")
+    #         return buffer
+    #     except:
+    #         return "error"
+    # else: return "error"
+
+
 
 def init_port(port):
     global serial_port
     if serial_port != None:
         serial_port.close()
     try:
-        serial_port = serial.Serial(port=com_port, baudrate=115200, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+        serial_port = serial.Serial(port=com_port, baudrate=115200, bytesize=8, timeout=5, stopbits=serial.STOPBITS_ONE)
         serial_port.set_buffer_size(rx_size = 128000, tx_size = 50)
         print("Listening to " + str(com_port))
     except:

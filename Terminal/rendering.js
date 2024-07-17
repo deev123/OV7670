@@ -69,7 +69,7 @@ class Renderer
         // the buffer to store canvas rgba values in for the context
         this.imageData = new Uint8Array(this.canvas.width * this.canvas.height * 4);  // saves the data into here // this remember the data for when the canvas resizes
         this.dataBufOffset = 0; //if one byte is missing this allows us to correct that
-        this.bigEndian = true;
+        this.bigEndian = false;
     }
 
 

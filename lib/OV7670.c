@@ -312,7 +312,8 @@ void OV7670_print_frame_buf()
     #endif
     for(uint32_t i = 0; i < OV7670_frame_buf_size; i++)
     {
-        printf("%02X", OV7670_frame_buf[i]);
+        // printf("%02X", OV7670_frame_buf[i]);
+        putchar(OV7670_frame_buf[i]);
     }
     #ifdef DEBUG
         printf("OV7670_print_frame(): End frame\n");

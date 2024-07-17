@@ -32,3 +32,11 @@ void command_set_register(uint8_t reg_addr, uint8_t value);
 void command_read_register(uint8_t reg_addr);
 
 void command_picture_default();
+
+/**
+ * Packetise and send data. Data begins with 4 bytes containing the size of the data, then the payload follows and a \r to indicate the end of transmission
+ */
+void command_respond(signed char* payload, uint32_t size);
+
+void command_send_test();
+

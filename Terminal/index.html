@@ -211,6 +211,8 @@
                     <!-- <button onclick="document.getElementById('serial-text-input').value += '\r'">&lt;CR&gt;</button> -->
                     <button onclick="sendSerial(document.getElementById('serial-text-input').value)">Send</button>
                     <button onclick="readSerial()">ReadLine</button>
+                    <button onclick="takePic()">Take Picture</button>
+                    <button onclick="toggleStream()">Stream</button>
 
                     <label for="serial-rx-out-text-box" class="label-top">RX:</label>
                     <textarea id="serial-rx-out-text-box" class="data-input-box" rows="10" cols="50" placeholder="Start Listening to serial and data will show in this box..."></textarea>
@@ -259,12 +261,12 @@
             <div class="input-and-label">
             <div class="input-and-label">
             <label for="big-endian">Big Endian</label>
-            <input id="big-endian" type="radio" id="big-endian" name="big-or-little-endian" value="big endian" checked onchange="image.bigEndian=true; image.render();">
+            <input id="big-endian" type="radio" id="big-endian" name="big-or-little-endian" value="big endian" onchange="image.bigEndian=true; image.render();">
             </div>
 
             <div class="input-and-label">
             <label for="little-endian">Little Endian</label>
-            <input id="little-endian" type="radio" id="little-endian" name="big-or-little-endian" value="little endian" onchange="image.bigEndian=false; image.render();">
+            <input id="little-endian" type="radio" id="little-endian" name="big-or-little-endian" value="little endian" checked onchange="image.bigEndian=false; image.render();">
             </div>
             </div>
 
