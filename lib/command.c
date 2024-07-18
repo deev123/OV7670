@@ -9,6 +9,7 @@
 
 signed char command_buffer[COMMAND_BUF_SIZE];
 ring_buf_t command_buf;
+uint8_t delimiter[10] = {0xFF,0xFF,  0x00,0x00,  0xF8,0x00,  0x07,0xE0,  0x00,0x1F};  //white, red, green, blue is unlikely to occur in a real image side by side, so a packet will begin with this sequence
 
 void command_buf_init()
 {
@@ -218,6 +219,10 @@ void command_respond_ok()
 
 void command_respond(signed char* payload, uint32_t size)
 {
+    for(uint8_t i = 0; i < sizeof(delimiter); i++)
+    {
+        putchar(delimiter[i]);
+    }
     signed char *ptr = (signed char *)&size; // to print 32 bit int as 4 bytes
     for(int8_t i = 3; i >= 0; i--)
     {
@@ -232,6 +237,11 @@ void command_respond(signed char* payload, uint32_t size)
 void command_send_test()
 {
     // just a red image
+    for(uint8_t i = 0; i < sizeof(delimiter); i++)
+    {
+        putchar(delimiter[i]);
+    }
+    
     uint32_t size = 38400;
     signed char *ptr = (signed char *)&size;
     for(int8_t i = 3; i >= 0; i--)

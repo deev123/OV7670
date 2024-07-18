@@ -52,12 +52,31 @@ def get_response():
     length = 0
     start_time = time.time()
 
+    delimiter = b'\xFF\xFF\x00\x00\xF8\x00\x07\xE0\x00\x1F'
+    delimiter_buffer = deque(maxlen=10)
+
+
+    skipped_bytes = b''
+    # skip until delimiter is seen
+    official_timeout = serial_port.timeout
+    serial_port.timeout = 1
+    skippedbytes = b''
+    while ((time.time() - start_time < 1000) and (bytearray(delimiter_buffer) != bytearray(delimiter))):
+        rx = serial_port.read(1)
+        if not rx: continue
+        skippedbytes += rx
+        delimiter_buffer.append(rx[0])
+        #print(delimiter_buffer)
+        #if(bytearray(delimiter_buffer)): break
+    serial_port.timeout = official_timeout
+    print("\033[93mSkipped leftover bytes: \033[96m" + str(skippedbytes) + "\033[0m")
+    #TODO: Make handle errors better
     rx = serial_port.read(4)
     length = int.from_bytes(rx)
     #print(str(length))
     print("\033[93mRead serial packet size \033[96m" + str(rx) + "\033[93m as: \033[96m" + str(length) + "\033[0m")
     rx = bytearray()
-    time.sleep(1)
+    #time.sleep(1)
 
     half = int(length/2)
     #for i in range(length):
@@ -68,7 +87,7 @@ def get_response():
 
     hex_representation = ''.join(struct.pack('B', x).hex() for x in rx)  #''.join(format(byte, '02x') for byte in rx)
     print("\033[93mSending back response:\033[0m")
-    print("\033[96m" + hex_representation + "\033[0m")
+    #print("\033[96m" + hex_representation + "\033[0m")
     return hex_representation
     return rx
 

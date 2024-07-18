@@ -69,7 +69,7 @@ let restartSerial = function()
 let readSerial = function()
 {
     serial.readSerial()
-    .then(result => {console.log(result); serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData();})
+    .then(result => {/*console.log(result);*/ serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData();})
     .catch((error) => console.error(error)); 
 
 }
@@ -88,7 +88,7 @@ let sendAndReceive = async function(tx)
     await serial.sendSerial(tx + "\r"); // writes, then sends back empty string
 
     await serial.readSerial()  // returns the data on the rx serial buffer
-    .then(result => {console.log(result); serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData();})   //response is sent back
+    .then(result => {/*console.log(result);*/ serialRxBox.value = result; document.getElementById("hex-input-box").value = result; renderHexData();})   //response is sent back
     //.then(readSerial())
     .catch((error) => console.error(error)); 
 }
