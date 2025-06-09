@@ -1,0 +1,23 @@
+%TF.GenerationSoftware,KiCad,Pcbnew,8.0.5*%
+%TF.CreationDate,2024-10-03T22:49:54+01:00*%
+%TF.ProjectId,OV7670 pico board,4f563736-3730-4207-9069-636f20626f61,rev?*%
+%TF.SameCoordinates,Original*%
+%TF.FileFunction,Profile,NP*%
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Created by KiCad (PCBNEW 8.0.5) date 2024-10-03 22:49:54*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+%TA.AperFunction,Profile*%
+%ADD10C,0.050000*%
+%TD*%
+G04 APERTURE END LIST*
+D10*
+X178070000Y-52510000D02*
+X237240000Y-52510000D01*
+X237240000Y-120210000D01*
+X178070000Y-120210000D01*
+X178070000Y-52510000D01*
+M02*
