@@ -67,3 +67,16 @@ TODO: Wiring Diagram
 
 ![image](https://github.com/user-attachments/assets/0a7f00a0-b1fc-4342-8396-72233ffa51da)
 
+
+You can paste data from copied from a terminal like putty or teraterm
+
+![image](https://github.com/user-attachments/assets/bb8c1681-ce2f-4564-b108-dabc695cab8f)
+
+
+Or listen to the serial if you have the flask server running locally
+
+![image](https://github.com/user-attachments/assets/8b81d580-8ba3-430e-ba38-d6848bb2cec1)
+
+![image](https://github.com/user-attachments/assets/ff023704-df12-46f0-a5bf-b15ef3cc5529)
+
+
