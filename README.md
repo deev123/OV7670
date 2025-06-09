@@ -53,34 +53,43 @@ The pin wiring of D0-D7 allows for the most efficient reading of the bits for re
 
 ## PCB
 
-I designed a PCB in KiCAD to fit the OV7670 and Pico.
+I designed a double sided PCB in KiCAD to fit the OV7670 and Pico.
 The lines are length matched (hence the sqiggly traces) making it suitable for high frequency reading when I can get it to work.
 
 <img src="https://github.com/user-attachments/assets/2857d3e9-5229-4c7d-9d31-f7428c9b1a0e" alt="Schematic" width="800"/>
 
 
-<img src="https://github.com/user-attachments/assets/0f4484f4-23d4-4e5e-a747-46e66110a29e" alt="PCB CAD Front and Back" width="300"/>
-<img src="https://github.com/user-attachments/assets/891a94db-da34-4024-95e3-d06abe09543e" alt="PCB CAD Front" width="300"/>
-<img src="https://github.com/user-attachments/assets/9f7b451d-e112-457c-b90f-a0f1d7ca32cd" alt="PCB CAD Back" width="300"/>
+<img src="https://github.com/user-attachments/assets/0f4484f4-23d4-4e5e-a747-46e66110a29e" alt="PCB CAD Front and Back" height="300"/>
+<img src="https://github.com/user-attachments/assets/891a94db-da34-4024-95e3-d06abe09543e" alt="PCB CAD Front" height="300"/>
+<img src="https://github.com/user-attachments/assets/9f7b451d-e112-457c-b90f-a0f1d7ca32cd" alt="PCB CAD Back" height="300"/>
 
 
 <img src="https://github.com/user-attachments/assets/e271a4e0-3ada-447c-be37-1c3a59831741" alt="PCB CAD 3D" width="300"/>
 
 
+There are optional pullup resistors on the I2C SDA and SCL lines but the internal ones seem to be sufficient.
+
+There is also space for an additional female header to access spare pins to connect with something else.
+
+
 I got the PCB printed from <a href="https://jlcpcb.com">JLC PCB</a>
 
 
-<img src="https://github.com/user-attachments/assets/428e6b09-9183-47f8-84f1-6da98499f956" alt="PCB Photo 1" width="400"/>
-<img src="https://github.com/user-attachments/assets/91f4761a-3701-4d72-b564-42162027da02" alt="PCB Photo 2" width="300"/>
-<img src="https://github.com/user-attachments/assets/0a7f00a0-b1fc-4342-8396-72233ffa51da" alt="PCB Photo 3" width="300"/>
+<img src="https://github.com/user-attachments/assets/428e6b09-9183-47f8-84f1-6da98499f956" alt="PCB Photo 1" height="400"/>
+<img src="https://github.com/user-attachments/assets/91f4761a-3701-4d72-b564-42162027da02" alt="PCB Photo 2" height="400"/>
+<img src="https://github.com/user-attachments/assets/0a7f00a0-b1fc-4342-8396-72233ffa51da" alt="PCB Photo 3" height="400"/>
 
 
 ## Web Terminal
 
-You can paste data from copied from a terminal like putty or teraterm
+You can paste data copied from a terminal like putty or teraterm into a box for it to render
+
+You need to have the image width set up right at least for correct rendering of rows and the height should be set to fit the image
+
+There is also an option for big or little endian interpretation of the pixels (which are 2 bytes RGB565)
 
 
-<img src="https://github.com/user-attachments/assets/bb8c1681-ce2f-4564-b108-dabc695cab8f" alt="Web Terminal Paste data tab" width="300"/>
+<img src="https://github.com/user-attachments/assets/bb8c1681-ce2f-4564-b108-dabc695cab8f" alt="Web Terminal Paste data tab" width="800"/>
 
 
 Or listen to the serial. For this you need to have the Flask server to read the serial port.
@@ -95,8 +104,7 @@ The Pico has limited memory and since I am not yet using two cores I need to sto
 <img src="https://github.com/user-attachments/assets/ff023704-df12-46f0-a5bf-b15ef3cc5529" alt="Picture from OV7670" width="800"/>
 
 
-There is some work I need to do:
-- I want to utilise both cores of the RP2040 processor so I can capture and trasmit the pixels in something like a producer consumer pattern. This will allow transmitting a frame of full resolution in one pass
-- I need to modify register values to properly set the camera settings to capture a coloured image
+There is some unfinished work:
+- I want to utilise both cores of the RP2040 processor so I can capture and trasmit the pixels at the same time in something like a producer consumer pattern. This will allow transmitting a frame of full resolution in one pass
+- I need to modify register values to properly set up the camera settings to capture a coloured image
 - I need to fix some data integrity issues
-
