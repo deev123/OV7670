@@ -46,3 +46,17 @@ https://amzn.eu/d/2ike6i4
 | D7 | GP15 |
 
 TODO: Wiring Diagram
+
+
+
+![image](https://github.com/user-attachments/assets/2857d3e9-5229-4c7d-9d31-f7428c9b1a0e)
+
+![OV7670 board CAD](https://github.com/user-attachments/assets/0f4484f4-23d4-4e5e-a747-46e66110a29e)
+
+
+![image](https://github.com/user-attachments/assets/428e6b09-9183-47f8-84f1-6da98499f956)
+
+![image](https://github.com/user-attachments/assets/91f4761a-3701-4d72-b564-42162027da02)
+
+![image](https://github.com/user-attachments/assets/0a7f00a0-b1fc-4342-8396-72233ffa51da)
+
