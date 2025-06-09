@@ -45,7 +45,11 @@ https://amzn.eu/d/2ike6i4
 | D6 | GP14 |
 | D7 | GP15 |
 
+
 TODO: Wiring Diagram
+The wiring of the data pins allows for the most efficient reading of the bits:
+![image](https://github.com/user-attachments/assets/c8c345af-8da8-4975-9492-c4372a878572)
+
 
 
 
