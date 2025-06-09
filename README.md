@@ -58,6 +58,8 @@ TODO: Wiring Diagram
 ![OV7670 board top](https://github.com/user-attachments/assets/891a94db-da34-4024-95e3-d06abe09543e)
 
 
+![image](https://github.com/user-attachments/assets/e271a4e0-3ada-447c-be37-1c3a59831741)
+
 
 ![image](https://github.com/user-attachments/assets/428e6b09-9183-47f8-84f1-6da98499f956)
 
