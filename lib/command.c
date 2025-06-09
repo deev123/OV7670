@@ -259,12 +259,12 @@ void command_send_test()
         else if(xpos >= ((160 / 3)) * 2)  // blue on right side
         {
             putchar(0b0000000);
-            putchar(0b0001111);
+            putchar(0b00011111);
         }
         else
         {
-            putchar(0b0000111);
-            putchar(0b1110000);
+            putchar(0b00000111);
+            putchar(0b11100000);
         }
         
     }

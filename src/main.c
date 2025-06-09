@@ -68,6 +68,7 @@ int main()
     //sleep_ms(5000);
     OV7670_init();
     OV7670_set_registers();
+    //OV7670_output_8_bar_color_test_pattern();
     //sleep_ms(1000);
     //OV7670_print_all_registers();
     //sleep_ms(1000);
