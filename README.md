@@ -2,7 +2,7 @@
 
 ## Preface
 
-The OV7670 is a bare-bones camera sensor module with a SCCB interface for registers setting the sensor settings and 8 data pins which stream half pixels in a VGA like way with a HSync and VSyc deliniating frames.
+The OV7670 is a bare-bones CMOS camera sensor module with a SCCB interface for registers setting the sensor settings and 8 data pins which stream half pixels in a VGA like way with a HSync and VSyc deliniating frames.
 There is a version of the sensor with a buffer but this repo does not use it. Instead it uses the Pico to capture and store the image data.
 
 <img src="https://github.com/deev123/OV7670/assets/91595217/3f21142b-7b1b-4eff-91cd-c2885df08a63" alt="OV7670 image 1" width="300"/>
